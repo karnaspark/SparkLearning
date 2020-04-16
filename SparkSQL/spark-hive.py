@@ -9,4 +9,6 @@ spark = SparkSession.builder.\
         enableHiveSupport().\
         getOrCreate()
 
-
+#We can work with hive data in 2 ways
+#1. Either we can create a dataframe out of a hive table
+#2. We can run sql on hive tables.
