@@ -1,0 +1,42 @@
+DDL ad DML
+DML
+    Native Spark does not support Update and Delete operations
+    Databricks has comeuo with a solution called "Delta Lake"
+    Splice Machine provides OLTP on spark
+    in AWS EMR, spark does not support delete and update 
+
+DDL 
+    Creation of tables
+    Addition of columns , delteion of columns
+    Altering data types
+
+In spark SQL,
+    either we can go with dataframe SQL or ANSI SQL.
+    ANSI SQL (we need to create tables)
+
+DATAFRAME SQL:
+    Addition of columns
+        df2.withColumn("domain",when(col("email").contains("hotmail"), "Microsoft").when(col("email").contains("gmail"),"Google").otherwise("Unknown")).show(10)
+    DRop columns
+        df2.drop("phone2","web").show(5)
+    Rename columns
+        df2.withColumnRenamed("first_name","firstname").withColumnRenamed("last_name","lastname").show(5)
+    Apply funcitons on columns and typecast
+        df2.withColumn("phone1",regexp_replace(col("phone1"),"-","")).withColumn("phone1",col("phone1").cast(LongType())).show(5)
+    Filters
+        df2.filter(col("email").contains("gmail")).show(5)
+        df2.where(col("email").contains("gmail")).show(5)
+        df2.where(col("email").contains("gmail")).filter(col("city")!="Leith").show(5)
+    Joins
+        df1.select("first_name","last_name").join(df3.select("first_name","email"), df1.first_name == df3.first_name,"inner").count()
+        left- leftOuter
+        right rightOuter full fullOuter
+        df1.select("first_name","last_name").join(df3.select("first_name","email"), df1.first_name.contains( df3.first_name),"left").show()
+    union and duplciates drop
+        df1.unionAll(df1).drop_duplicates().count() 
+    Aggregations       
+        df1.groupBy("city").agg(count("*")).count()
+        df1.groupBy("city").agg(count("*").alias("citycount")).show(5)
+        df1.groupBy("city").agg(count("*").alias("citycount")).orderBy(desc("citycount")).show(5)
+        df1.groupBy("state","city").agg(count("*").alias("citycount")).orderBy(desc("citycount"),"state").show(5)
+        df1.withColumn("row_number",monotonically_increasing_id()).show(5)
