@@ -1,0 +1,50 @@
+https://dwgeek.com/guide-connecting-hiveserver2-using-python-pyhive.html/
+
+sudo apt-get install libsasl2-dev
+pip install pyHive
+pip install sasl
+pip install thrift
+pip install thrift_sasl
+
+df = spark.read.format("csv").option("header",True).option("inferSchema",True).load("s3://datasets-spark-learning/flat_files/au-500.csv")
+
+hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+hive.exec.dynamic.partition.mode=nonstrict;
+hive.enforce.bucketing=True;
+hive.support.concurrency=true
+
+
+hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+hive.exec.dynamic.partition.mode=nonstrict;
+hive.enforce.bucketing=True;
+hive.support.concurrency=true
+hive.exec.max.dynamic.partitions=200
+hive.exec.max.dynamic.partitions.pernode=20
+hive.exec.max.dynamic.partitions=100000;
+hive.exec.max.dynamic.partitions.pernode=100000;
+
+  
+
+
+
+  CREATE TABLE update_user2(
+firstname VARCHAR(64),
+  lastname  VARCHAR(64),
+  address   STRING,
+  city VARCHAR(64),
+state  VARCHAR(64),
+  post      INT,
+  phone1    VARCHAR(64),
+  phone2    STRING,
+  email     STRING,
+  web       STRING
+  )
+COMMENT "A bucketed user table"
+  PARTITIONED BY (country VARCHAR(64))
+CLUSTERED BY (state) INTO 32 BUCKETS
+  STORED AS ORC
+  TBLPROPERTIES('transactional'='true')
+  ;
+
+hive> insert into update_user2 partition(country) select * from orc_table;
+
