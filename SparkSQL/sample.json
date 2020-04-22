@@ -1,0 +1,26 @@
+[{"name":"spark",
+ "version":2.3 ,
+ "address": {
+        "street":"1-2-3",
+        "city":"hyd",
+        "state":"TG"
+ }  
+}
+,
+{"name":"spark",
+    "version":2.3 ,
+    "address": {
+           "street":"1-2-3",
+           "city":"hyd",
+           "state":"TG"
+    }  
+   },
+   {"name":"spark",
+    "version":2.3 ,
+    "address": {
+           "street":"1-2-3",
+           "city":"hyd",
+           "state":"TG"
+    }  
+   }
+]
