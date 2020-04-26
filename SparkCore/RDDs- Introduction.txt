@@ -1,0 +1,37 @@
+Resilient Distributed Dataset: RDD
+    Spark's very basic API is RDD API
+    Dataframes -->spark 1.3 
+
+    Dataframe API is not independent , instead it is built on top of RDD API and with certain optimizations
+
+    Spark Session object(2.x) , SQL Context object, Hive Context object-> Dataframes
+    spark Context object -->  RDDs
+    Creation of RDDs --> file formats (textfile), we cannot create RDD out of parquet,orc,avro, tables
+    Sources --> data lakes(s3), LFS, HDFS,S3,NFS,Cassandra,MongoDB,Local collections\
+
+Local Collection :
+    rdd1 = sc.parallelize(l1)
+    rdd2 = sc.parallelize(r1)
+        ParallelCollectionRDD[0] at parallelize at PythonRDD.scala:195
+    rdd2
+        ParallelCollectionRDD[1] at parallelize at PythonRDD.scala:195 
+rd1 = sc.textFile("s3a://datasets-spark-learning/flat_files/us-500.csv")
+rd2 = sc.textFile("hdfs://ip-172-31-3-196:8020/user/hadoop/au-500.csv")
+rd2 = sc.textFile("/user/hadoop/au-500.csv") ---this pulls the data from HDFS, spark is integrated with HDFS
+rd2 = sc.textFile("file:///home/hadoop/au-500.csv") ---- Local File System , If spark is not integrated with HDFS , then by default it will search for a file in LFS.
+rd2 = sc.textFile("file:///home/hadoop/weblogs")
+
+RDD Operations:
+
+    RDD has its own set of Transformations and Actions
+    Transformations
+        Narrow and Wide Transformations
+        Map and Reduce
+        Map --> Narrow 
+        Reduce --> Wide, Aggregations,Shuffling
+    rd2.map(lambda x: x + "spark")  use map when we want to apply some logic to every record of RDD
+        input rdd has n records ---> map ---> output rdd should have n records
+    rd2.filter(lambda x: "Feb" in x).count() --> Tranformation --> Narrow 
+    rd3.collect --> Action  -> do not use colect if the datasets are large
+    rd3.distinct().collect() --> Distinct is a wide transformation
+    r4.intersection(rd3).collect() --> intersection , wide
