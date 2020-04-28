@@ -3,6 +3,9 @@
 
 rd2 = sc.textFile("file:///home/hadoop/weblogs")
 
+
+
+
 import re
 
 def search_pattern(s):
@@ -11,3 +14,18 @@ def search_pattern(s):
     return ip.group(0)
 
 rd2.map(lambda rec: search_pattern(rec)).take(5)
+
+
+#Is it possible to read each file as a record of a RDD
+
+def max(x,y):
+    if (x>y):
+        return x
+    else:
+        return y     
+
+def part(x):
+    yield (len(list(x)))
+
+def part1(x):
+    yield (x)    
