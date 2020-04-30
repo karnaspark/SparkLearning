@@ -1,0 +1,31 @@
+Lazy-Evaluation
+------------------
+Spark transformations will not be evaluated until action is triggered.
+
+rd1 = sc.textFile("s3a://datasets-spark-learning/flat_files/au-50")  -- data will be loaded from source  
+    source --> hdfs  disk (file) b1,b2,b3,b4 --> rdd(p1,p2,p3,p4) Spark memory
+
+rd1.flatMap(lambda x:x.split(",")).map(lambda x:(x,1)).reduceByKey 
+disk        memory                                  memory              disk
+hdfs b1-->    p1--> map(func)  ->falttening --> P1 --> map(fun)-->q1 --> spark
+hdfs b2-->    p2--> map(func)  ->falttening--> P2  --> map(fun)-->q2
+hdfs b3-->    p3--> map(func) -->falttening--> P3  --> map(fun)-->q3--> spark
+hdfs b4-->    p4--> map(func)--> falttening--> P4  --> map(fun)-->q4 --> spark
+
+Resilience -->  the feature of spark to recompute the lost partitions 
+                If the transformations are complex and/or if the number of transformations are more..then recompute from scratch (source) will be costly.
+                How to address this issue --> persistence some rdds at some transformations
+                source --> r1 
+                r1 -t1 ->r2
+                r2--t2-->r3 (persist r3)
+                r3--t3-->r4
+                r4--t4-->r5
+
+                where and what type of rdds must be persisted? if rdds are generated from a complex transformation
+            
+In order to recompute, spark has to remember the sequence of transformations as a graph called lineage graph.
+
+Lazy Evalution -> to speed up the performance utilising the resources effectively
+
+persistence:
+    An RDD can be persisted in memory or disk
