@@ -68,3 +68,43 @@ streamc.stop(False,True)--> Graceful
         2 d arguemnt --> stop the application gracefully --> it will process the data with 2 more processing attempts.
 
 
+Sources:
+        Basic sources --> Socket , file stream
+                Filestream --> reading data from a filesystem/object system (LFS, HDFS S3, Blob)
+                                spark app will look for new feeds in  directory
+        Advanced sources --> flume, kafka, kinesis, straming sources
+
+
+Dstream  --> bacth duration = 1 min
+7.00 --7.01 -->P1(b1)
+7.01 --7.02 -->P(b2)
+7.02 --7.03 -->P(b3)
+7.03 --7.04 -->P(b4)
+7.04 ---->7.04.30 
+
+r1 = sc.textFile("file")
+r2 = r1.t1()
+r1 --> t1 --> r2
+
+ds1 = streamc.socketTextStream("")
+        dstream object ---> Reciver
+Dstream         7.00 --7.01 -->P1(b1) --> this bacth b1 will be delted from memory receive of first bacth    
+                7.01 --7.02 -->P(b2)    ---> receiving of second batch and processing of first batch  
+                7.02 --7.03 -->P(b3)   --->  receiving of third batch and processing of second batch
+                7.03 --7.04 -->P(b4)
+                ....
+                ....
+Dstream -->t1 --> r1,r2,r3 -->t --> p1,p2     P2,P3   
+
+2 types of transformations 
+        stateful --> current batch of data and previous batch/bacthes of data will be used in the transformation
+        stateless --> only current batch is used in transformation.
+
+current batch --> 3 previous batches 
+
+
+
+
+
+
+
